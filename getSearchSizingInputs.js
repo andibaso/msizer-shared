@@ -181,7 +181,7 @@ db.getMongo().getDBNames()
         for (const ix of defs) {
           const def = ix.latestDefinition || ix.definition || {};
           const rec = {
-            ns, index: ix.name, type: ix.type || "search", status: ix.status, queryable: ix.queryable,
+            ns, index: ix.name, type: ix.type || ((def && Array.isArray(def.fields) && def.fields.some(f => f && f.type === "vector")) ? "vectorSearch" : "search"), status: ix.status, queryable: ix.queryable,
             estimatedDocumentCount: est, sampledDocs: docs.length, definition: def,
           };
           if (rec.type === "vectorSearch") rec.vectorFields = measureVector(docs, def);
